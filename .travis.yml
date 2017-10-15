@@ -1,0 +1,17 @@
+language: php
+
+php:
+  - 7.0
+  - 7.1
+  - 7.2
+
+sudo: false
+
+install:
+  - composer install --no-interaction --prefer-dist
+
+script:
+  - vendor/bin/phpunit
+
+notifications:
+  email: false
