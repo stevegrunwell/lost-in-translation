@@ -1,0 +1,33 @@
+{
+    "name": "stevegrunwell/lost-in-translation",
+    "description": "Utility for finding missing translations in Laravel applications",
+    "type": "library",
+    "keywords": ["laravel", "laravel package", "translation", "qa"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Steve Grunwell",
+            "homepage": "https://stevegrunwell.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/stevegrunwell/lost-in-translation/issues",
+        "source": "https://github.com/stevegrunwell/lost-in-translation/"
+    },
+    "require-dev": {
+        "orchestra/testbench": "~3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "LostInTranslation\\": "src/",
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LostInTranslation\\Providers\\TranslationServiceProvider"
+            ]
+        }
+    }
+}
