@@ -28,6 +28,8 @@ class TranslatorTest extends TestCase
 
     public function testThrowsMissingTranslationException()
     {
+        config(['lostintranslation.throw_exceptions' => true]);
+
         try {
             trans('testData.missing_key');
 

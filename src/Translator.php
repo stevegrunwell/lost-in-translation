@@ -26,11 +26,15 @@ class Translator extends BaseTranslator {
     {
         $translation = parent::get($key, $replace, $locale, $fallback);
 
-        // Throw a MissingTranslationException if no translation was made.
+        // The "translation" is unchanged from the key.
         if ($translation === $key) {
-            throw new MissingTranslationException(
-                sprintf('Could not find translation for "%s".', $key)
-            );
+
+            // Throw a MissingTranslationException if no translation was made.
+            if (config('lostintranslation.throw_exceptions')) {
+                throw new MissingTranslationException(
+                    sprintf('Could not find translation for "%s".', $key)
+                );
+            }
         }
 
         return $translation;
