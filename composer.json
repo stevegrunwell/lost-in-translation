@@ -1,6 +1,6 @@
 {
     "name": "stevegrunwell/lost-in-translation",
-    "description": "Utility for finding missing translations in Laravel applications",
+    "description": "Uncover missing translations and localization strings in Laravel applications",
     "type": "library",
     "keywords": ["laravel", "laravel package", "translation", "qa"],
     "license": "MIT",
