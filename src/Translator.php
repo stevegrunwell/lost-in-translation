@@ -8,6 +8,13 @@ use LostInTranslation\Exceptions\MissingTranslationException;
 class Translator extends BaseTranslator {
 
     /**
+     * The current logger instance.
+     *
+     * @var \Illuminate\Log\Writer
+     */
+    protected $logger;
+
+    /**
      * Get the translation for the given key.
      *
      * This method acts as a pass-through to Illuminate\Translation\Translator::get(), but verifies
@@ -29,6 +36,11 @@ class Translator extends BaseTranslator {
         // The "translation" is unchanged from the key.
         if ($translation === $key) {
 
+            // Log the missing translation.
+            if (config('lostintranslation.log')) {
+                $this->logMissingTranslation($key, $replace, $locale, $fallback);
+            }
+
             // Throw a MissingTranslationException if no translation was made.
             if (config('lostintranslation.throw_exceptions')) {
                 throw new MissingTranslationException(
@@ -38,5 +50,23 @@ class Translator extends BaseTranslator {
         }
 
         return $translation;
+    }
+
+    /**
+     * Log a missing translation.
+     *
+     * @param  string       $key
+     * @param  array        $replace
+     * @param  string|null  $locale
+     * @param  bool         $fallback
+     */
+    protected function logMissingTranslation($key, $replace, $locale, $fallback)
+    {
+        if (! $this->logger) {
+            $this->logger = logger();
+            $this->logger->useFiles(storage_path('logs/lost-in-translation.log'));
+        }
+
+        $this->logger->notice('Missing translation: ' . $key);
     }
 }

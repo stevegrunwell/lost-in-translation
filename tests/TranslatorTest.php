@@ -2,8 +2,10 @@
 
 namespace Tests;
 
+use Illuminate\Log\Writer;
 use LostInTranslation\Exceptions\MissingTranslationException;
 use LostInTranslation\Translator;
+use Mockery;
 use ReflectionProperty;
 
 class TranslatorTest extends TestCase
@@ -24,6 +26,28 @@ class TranslatorTest extends TestCase
 
         $this->assertEquals($unique, trans('testData.key'));
         $this->assertEquals('This was nested', trans('testData.nested.foo.bar.baz'));
+    }
+
+    public function testLogsMissingTranslations()
+    {
+        config(['lostintranslation.log' => true]);
+
+        $mock = $this->createLoggerSpy();
+
+        trans('testData.thisValueHasNotBeenDefined');
+
+        $mock->shouldHaveReceived('notice');
+    }
+
+    public function testLoggingCanBeDisabled()
+    {
+        config(['lostintranslation.log' => false]);
+
+        $mock = $this->createLoggerSpy();
+
+        trans('testData.thisValueHasNotBeenDefined');
+
+        $mock->shouldNotHaveReceived('notice');
     }
 
     public function testThrowsMissingTranslationException()
@@ -68,5 +92,20 @@ class TranslatorTest extends TestCase
                 ],
             ],
         ]);
+    }
+
+    /**
+     * Create a Mockery spy and assign it to Translator::$logger.
+     *
+     * @return \Mockery\MockInterface
+     */
+    protected function createLoggerSpy()
+    {
+        $mock = Mockery::spy(Writer::class);
+        $prop = new ReflectionProperty(Translator::class, 'logger');
+        $prop->setAccessible(true);
+        $prop->setValue(resolve('translator'), $mock);
+
+        return $mock;
     }
 }
