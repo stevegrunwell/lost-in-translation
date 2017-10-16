@@ -67,6 +67,10 @@ class Translator extends BaseTranslator {
             $this->logger->useFiles(storage_path('logs/lost-in-translation.log'));
         }
 
-        $this->logger->notice('Missing translation: ' . $key);
+        $this->logger->notice('Missing translation: ' . $key, [
+            'replacements' => $replace,
+            'locale' => $locale ? $locale : config('app.locale'),
+            'fallback' => $fallback ? config('app.fallback_locale') : '',
+        ]);
     }
 }
