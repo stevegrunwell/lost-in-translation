@@ -24,6 +24,11 @@
             "Tests\\": "tests/"
         }
     },
+    "scripts": {
+        "test-coverage": [
+            "phpunit --coverage-html=tests/coverage"
+        ]
+    },
     "extra": {
         "laravel": {
             "providers": [
