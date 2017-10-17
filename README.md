@@ -39,3 +39,56 @@ $ php artisan vendor:publish --provider="LostInTranslation\Providers\Translation
 ```
 
 This will create a new file in `config/lostintranslation.php`, where default values for your application can be set.
+
+## Extending
+
+When a missing translation is found, the a `LostInTranslation\MissingTranslationFound` event will be dispatched. This event makes it easy to do something (send an email, open a GitHub issue, etc.)when a missing translation is encountered.
+
+First, create a new event listener in your application; in this example, we're using `app/Listeners/NotifyOfMissingTranslation.php`:
+
+```php
+<?php
+
+namespace App\Listeners;
+
+use LostInTranslation\Events\MissingTranslationFound;
+
+class NotifyOfMissingTranslation
+{
+    /**
+     * Handle the event.
+     *
+     * @param MissingTranslationFound $event
+     *
+     * @return void
+     */
+    public function handle(MissingTranslationFound $event)
+    {
+        // Do something with the event.
+    }
+}
+```
+
+The `MissingTranslationFound` event has four public properties of note:
+
+1. `$key` - The translation key that was not found.
+2. `$replacements` - Any replacements that were passed to the translation call.
+3. `$locale` - The locale that was being used.
+4. `$fallback` - The fallback locale, if defined.
+
+Then, in `app/Providers/EventServiceProvider.php`, add the following to register `NotifyOfMissingTranslation` as a callback when a `MissingTranslationFound` event occurs:
+
+```php
+/**
+ * The event listener mappings for the application.
+ *
+ * @var array
+ */
+protected $listen = [
+    'LostInTranslation\Events\MissingTranslationFound' => [
+        'App\Listeners\NotifyOfMissingTranslation',
+    ],
+];
+```
+
+For more on event listeners, [please see the Laravel Events documentation](https://laravel.com/docs/5.5/events).

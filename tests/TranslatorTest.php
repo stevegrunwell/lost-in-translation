@@ -3,6 +3,8 @@
 namespace Tests;
 
 use Illuminate\Log\Writer;
+use Illuminate\Support\Facades\Event;
+use LostInTranslation\Events\MissingTranslationFound;
 use LostInTranslation\Exceptions\MissingTranslationException;
 use LostInTranslation\Translator;
 use Mockery;
@@ -10,6 +12,13 @@ use ReflectionProperty;
 
 class TranslatorTest extends TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        Event::fake();
+    }
+
     public function testCanMockTranslationData()
     {
         $unique = uniqid();
@@ -64,6 +73,15 @@ class TranslatorTest extends TestCase
         }
 
         $this->fail('Did not receive expected exception.');
+    }
+
+    public function testFiresMissingTranslationFoundEvent()
+    {
+        trans('testData.thisValueHasNotBeenDefined');
+
+        Event::assertDispatched(MissingTranslationFound::class, function ($e) {
+            return 'testData.thisValueHasNotBeenDefined' === $e->key;
+        });
     }
 
     /**

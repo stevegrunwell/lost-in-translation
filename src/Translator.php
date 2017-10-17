@@ -3,6 +3,7 @@
 namespace LostInTranslation;
 
 use Illuminate\Translation\Translator as BaseTranslator;
+use LostInTranslation\Events\MissingTranslationFound;
 use LostInTranslation\Exceptions\MissingTranslationException;
 
 class Translator extends BaseTranslator {
@@ -47,6 +48,9 @@ class Translator extends BaseTranslator {
                     sprintf('Could not find translation for "%s".', $key)
                 );
             }
+
+            // Dispatch a MissingTranslationFound event.
+            event(new MissingTranslationFound($key, $replace, $locale, $fallback));
         }
 
         return $translation;
