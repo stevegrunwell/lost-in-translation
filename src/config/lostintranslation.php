@@ -16,5 +16,5 @@ return [
      * When true, MissingTranslationException exceptions will be thrown when a string is unable to
      * be translated.
      */
-    'throw_exceptions' => env('TRANS_ERROR_ON_MISSING', config('app.debug')),
+    'throw_exceptions' => env('TRANS_ERROR_ON_MISSING', false),
 ];
