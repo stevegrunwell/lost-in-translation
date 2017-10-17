@@ -30,7 +30,7 @@ Either of these can be disabled via the package's configuration, making Lost in 
     <dt>TRANS_LOG_MISSING</dt>
     <dd>Determines whether or not missing translations should be logged. Default is "true".</dd>
     <dt>TRANS_ERROR_ON_MISSING</dt>
-    <dd>Should <code>MissingTranslationException</code> exceptions be thrown when a translation is missing? If not defined, this will default to the value of <code>config('app.debug')</code>.</dd>
+    <dd>Should <code>MissingTranslationException</code> exceptions be thrown when a translation is missing? Default is "false".</dd>
 </dl>
 
 To override package configuration, run the following to copy the configuration to your app's `config/` directory:
