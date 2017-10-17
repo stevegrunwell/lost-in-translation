@@ -8,10 +8,16 @@ php:
 sudo: false
 
 install:
+  - wget https://github.com/php-coveralls/php-coveralls/releases/download/v1.0.0/coveralls.phar
+  - chmod +x coveralls.phar
   - composer install --no-interaction --prefer-dist
 
 script:
-  - vendor/bin/phpunit
+  - mkdir -p build/logs
+  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+
+after_success:
+  - travis_retry php coveralls.phar
 
 notifications:
   email: false

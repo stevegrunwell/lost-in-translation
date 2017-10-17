@@ -1,6 +1,7 @@
 # Lost in Translation
 
 [![Build Status](https://travis-ci.org/stevegrunwell/lost-in-translation.svg?branch=develop)](https://travis-ci.org/stevegrunwell/lost-in-translation)
+[![Coverage Status](https://coveralls.io/repos/github/stevegrunwell/lost-in-translation/badge.svg?branch=develop)](https://coveralls.io/github/stevegrunwell/lost-in-translation?branch=develop)
 
 Lost in Translation is designed to help developers locate instances of [localization strings within a Laravel application](https://laravel.com/docs/5.5/localization) that haven't been provided translations.
 
