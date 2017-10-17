@@ -42,11 +42,11 @@ class MissingTranslationFound
      *
      * @return void
      */
-    public function __construct($key, array $replace = [], $locale = null, $fallback = true)
+    public function __construct($key, array $replace = [], $locale = null, $fallback = null)
     {
         $this->key = $key;
         $this->replacements = $replace;
-        $this->locale = $locale;
-        $this->fallback = $fallback;
+        $this->locale = $locale ? $locale : config('app.locale');
+        $this->fallback = $fallback ? $fallback : config('app.fallback_locale');
     }
 }
