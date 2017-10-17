@@ -52,9 +52,11 @@ class TranslationServiceProvider extends BaseProvider
          * TranslationServiceProvider doesn't currently have a boot() method, but this ensures it
          * will still be run should it ever be added.
          */
+         // @codeCoverageIgnoreStart
         if (is_callable('parent::boot')) {
             parent::boot();
         }
+        // @codeCoverageIgnoreEnd
 
         // Enable developers to publish the configuration.
         $this->publishes([
