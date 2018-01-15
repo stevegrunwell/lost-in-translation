@@ -2,6 +2,8 @@
 
 namespace LostInTranslation;
 
+use Monolog\Logger as Monolog;
+use Illuminate\Log\Writer;
 use Illuminate\Translation\Translator as BaseTranslator;
 use LostInTranslation\Events\MissingTranslationFound;
 use LostInTranslation\Exceptions\MissingTranslationException;
@@ -67,7 +69,7 @@ class Translator extends BaseTranslator {
     protected function logMissingTranslation($key, $replace, $locale, $fallback)
     {
         if (! $this->logger) {
-            $this->logger = logger();
+            $this->logger = new Writer(new Monolog('lost-in-translation'));
             $this->logger->useFiles(storage_path('logs/lost-in-translation.log'));
         }
 
