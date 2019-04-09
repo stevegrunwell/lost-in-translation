@@ -9,7 +9,7 @@ class MissingTranslationFoundTest extends TestCase
 {
     protected $faker;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
