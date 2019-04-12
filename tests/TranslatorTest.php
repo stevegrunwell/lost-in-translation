@@ -13,7 +13,7 @@ class TranslatorTest extends TestCase
 {
     const LOG_FILE = 'logs/lost-in-translation.log';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -83,7 +83,6 @@ class TranslatorTest extends TestCase
 
         try {
             trans('testData.missing_key');
-
         } catch (MissingTranslationException $e) {
             $this->assertInstanceOf(MissingTranslationException::class, $e);
 
@@ -124,7 +123,7 @@ class TranslatorTest extends TestCase
         $loaded->setValue($translator, [
             '*' => [
                 'testData' => [
-                    'en' => (array) $translations,
+                    'en' => (array)$translations,
                 ],
             ],
         ]);
