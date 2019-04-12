@@ -7,12 +7,13 @@ use Illuminate\Support\Facades\Event;
 use LostInTranslation\Events\MissingTranslationFound;
 use LostInTranslation\Exceptions\MissingTranslationException;
 use LostInTranslation\Translator;
-use Mockery;
 use ReflectionProperty;
 
 class TranslatorTest extends TestCase
 {
-    public function setUp()
+    const LOG_FILE = 'logs/lost-in-translation.log';
+
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -41,22 +42,39 @@ class TranslatorTest extends TestCase
     {
         config(['lostintranslation.log' => true]);
 
-        $mock = $this->createLoggerSpy();
+        file_put_contents(storage_path(self::LOG_FILE), '');
 
         trans('testData.thisValueHasNotBeenDefined');
 
-        $mock->shouldHaveReceived('notice');
+        $this->assertNotEmpty(file_get_contents(storage_path(self::LOG_FILE)));
     }
 
     public function testLoggingCanBeDisabled()
     {
         config(['lostintranslation.log' => false]);
 
-        $mock = $this->createLoggerSpy();
+        file_put_contents(storage_path(self::LOG_FILE), '');
 
         trans('testData.thisValueHasNotBeenDefined');
 
-        $mock->shouldNotHaveReceived('notice');
+        $this->assertEmpty(file_get_contents(storage_path(self::LOG_FILE)));
+    }
+
+    public function testLogConfigCanBeOverridden()
+    {
+        $log = storage_path('logs/log-' . uniqid() . '.log');
+        config([
+            'lostintranslation.log' => true,
+            'logging.channels.lost-in-translation' => [
+                'driver' => 'single',
+                'path' => $log,
+            ],
+        ]);
+
+        trans('testData.thisValueHasNotBeenDefined');
+
+        $this->assertNotEmpty(file_get_contents($log));
+        unlink($log);
     }
 
     public function testThrowsMissingTranslationException()
@@ -65,7 +83,6 @@ class TranslatorTest extends TestCase
 
         try {
             trans('testData.missing_key');
-
         } catch (MissingTranslationException $e) {
             $this->assertInstanceOf(MissingTranslationException::class, $e);
 
@@ -106,24 +123,9 @@ class TranslatorTest extends TestCase
         $loaded->setValue($translator, [
             '*' => [
                 'testData' => [
-                    'en' => (array) $translations,
+                    'en' => (array)$translations,
                 ],
             ],
         ]);
-    }
-
-    /**
-     * Create a Mockery spy and assign it to Translator::$logger.
-     *
-     * @return \Mockery\MockInterface
-     */
-    protected function createLoggerSpy()
-    {
-        $mock = Mockery::spy(Writer::class);
-        $prop = new ReflectionProperty(Translator::class, 'logger');
-        $prop->setAccessible(true);
-        $prop->setValue(resolve('translator'), $mock);
-
-        return $mock;
     }
 }

@@ -41,6 +41,21 @@ $ php artisan vendor:publish --provider="LostInTranslation\Providers\Translation
 
 This will create a new file in `config/lostintranslation.php`, where default values for your application can be set.
 
+## Changing the log destination
+
+By default, Lost in Translation will write logs to `storage/logs/lost-in-translation.log`, but you may adjust this by configuring a `lost-in-translation` channel in `config/logging.php`:
+
+```php
+'channels' => [
+    // Other channels (stack, single, daily, etc.).
+
+    'lost-in-translation' => [
+        'driver' => 'single',
+        'path' => '/path/to/lost-in-translation.log',
+    ],
+],
+```
+
 ## Extending
 
 When a missing translation is found, the a `LostInTranslation\MissingTranslationFound` event will be dispatched. This event makes it easy to do something (send an email, open a GitHub issue, etc.)when a missing translation is encountered.

@@ -5,15 +5,9 @@ namespace LostInTranslation;
 use Illuminate\Translation\Translator as BaseTranslator;
 use LostInTranslation\Events\MissingTranslationFound;
 use LostInTranslation\Exceptions\MissingTranslationException;
+use Monolog\Handler\StreamHandler;
 
 class Translator extends BaseTranslator {
-
-    /**
-     * The current logger instance.
-     *
-     * @var \Illuminate\Log\Writer
-     */
-    protected $logger;
 
     /**
      * Get the translation for the given key.
@@ -66,12 +60,18 @@ class Translator extends BaseTranslator {
      */
     protected function logMissingTranslation($key, $replace, $locale, $fallback)
     {
-        if (! $this->logger) {
-            $this->logger = logger();
-            $this->logger->useFiles(storage_path('logs/lost-in-translation.log'));
+        // If no lost-in-translation logging channel exists, define one at runtime.
+        if (! config('logging.channels.lost-in-translation', false)) {
+            config([
+                'logging.channels.lost-in-translation' => [
+                    'driver' => 'single',
+                    'path' => storage_path('logs/lost-in-translation.log'),
+                    'level' => 'warning',
+                ],
+            ]);
         }
 
-        $this->logger->notice('Missing translation: ' . $key, [
+        logs('lost-in-translation')->warning('Missing translation: ' . $key, [
             'replacements' => $replace,
             'locale' => $locale ? $locale : config('app.locale'),
             'fallback' => $fallback ? config('app.fallback_locale') : '',
