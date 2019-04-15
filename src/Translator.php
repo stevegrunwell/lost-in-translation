@@ -20,8 +20,10 @@ class Translator extends BaseTranslator {
     /**
      * Create a new translator instance.
      *
-     * @param  \Illuminate\Contracts\Translation\Loader  $loader
-     * @param  string  $locale
+     * @param \Illuminate\Contracts\Translation\Loader  $loader
+     * @param string                                    $locale
+     * @param \Illuminate\Log\Logger                    $logger
+     *
      * @return void
      */
     public function __construct(Loader $loader, string $locale, Logger $logger)
