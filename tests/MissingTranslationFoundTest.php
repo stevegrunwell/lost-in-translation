@@ -5,8 +5,8 @@ namespace Tests;
 use LostInTranslation\Events\MissingTranslationFound;
 
 /**
- * @testdox MissingTranslationFound exception
- * @group Exceptions
+ * @testdox MissingTranslationFound event
+ * @group Events
  */
 class MissingTranslationFoundTest extends TestCase
 {
