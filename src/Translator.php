@@ -2,6 +2,8 @@
 
 namespace LostInTranslation;
 
+use Illuminate\Contracts\Translation\Loader;
+use Illuminate\Log\Logger;
 use Illuminate\Translation\Translator as BaseTranslator;
 use LostInTranslation\Events\MissingTranslationFound;
 use LostInTranslation\Exceptions\MissingTranslationException;
@@ -11,9 +13,23 @@ class Translator extends BaseTranslator {
     /**
      * The current logger instance.
      *
-     * @var \Illuminate\Log\Writer
+     * @var \Illuminate\Log\Logger
      */
     protected $logger;
+
+    /**
+     * Create a new translator instance.
+     *
+     * @param  \Illuminate\Contracts\Translation\Loader  $loader
+     * @param  string  $locale
+     * @return void
+     */
+    public function __construct(Loader $loader, string $locale, Logger $logger)
+    {
+        parent::__construct($loader, $locale);
+
+        $this->logger = $logger;
+    }
 
     /**
      * Get the translation for the given key.
