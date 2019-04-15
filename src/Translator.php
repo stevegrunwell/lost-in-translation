@@ -77,17 +77,17 @@ class Translator extends BaseTranslator {
     /**
      * Log a missing translation.
      *
-     * @param  string       $key
-     * @param  array        $replace
-     * @param  string|null  $locale
-     * @param  bool         $fallback
+     * @param string $key
+     * @param array  $replacements
+     * @param string $locale
+     * @param bool   $fallback
      */
-    protected function logMissingTranslation($key, $replace, $locale, $fallback)
+    protected function logMissingTranslation(string $key, array $replacements, ?string $locale, bool $fallback): void
     {
         $this->logger->notice('Missing translation: ' . $key, [
-            'replacements' => $replace,
-            'locale' => $locale ? $locale : config('app.locale'),
-            'fallback' => $fallback ? config('app.fallback_locale') : '',
+            'replacements' => $replacements,
+            'locale'       => $locale ?: config('app.locale'),
+            'fallback'     => $fallback ? config('app.fallback_locale') : '',
         ]);
     }
 }
