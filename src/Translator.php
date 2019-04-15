@@ -84,11 +84,6 @@ class Translator extends BaseTranslator {
      */
     protected function logMissingTranslation($key, $replace, $locale, $fallback)
     {
-        if (! $this->logger) {
-            $this->logger = logger();
-            $this->logger->useFiles(storage_path('logs/lost-in-translation.log'));
-        }
-
         $this->logger->notice('Missing translation: ' . $key, [
             'replacements' => $replace,
             'locale' => $locale ? $locale : config('app.locale'),
