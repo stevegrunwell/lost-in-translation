@@ -44,7 +44,7 @@ install:
       chmod +x coveralls.phar
       mkdir -p build/logs
     fi
-  - composer require --dev "orchestra/testbench=^$TESTBENCH_VERSION" --no-interaction --prefer-dist
+  - composer require --dev "orchestra/testbench=^$TESTBENCH_VERSION" --no-interaction --prefer-dist --prefer-lowest
 
 script:
   - |
