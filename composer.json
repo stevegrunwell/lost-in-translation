@@ -35,17 +35,20 @@
         }
     },
     "scripts": {
-        "test": [
-            "phpunit --testdox --colors=always",
+        "coding-standards": [
             "phpcs",
             "php-cs-fixer fix --dry-run --verbose",
             "phpstan analyse ./src/"
+        ],
+        "test": [
+            "phpunit --testdox --colors=always"
         ],
         "test-coverage": [
             "phpdbg -qrr -d memory_limit=-1 ./vendor/bin/phpunit --testdox --colors=always --coverage-html=tests/coverage"
         ]
     },
     "scripts-descriptions": {
+        "coding-standards": "Check coding standards and perform static code analysis.",
         "test": "Run all tests for the package.",
         "test-coverage": "Generate code coverage reports for the package."
     },

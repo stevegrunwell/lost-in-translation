@@ -21,6 +21,9 @@ env:
 matrix:
   fast_finish: true
   include:
+    - name: Coding Standards
+      php: 7.2
+      env: TESTBENCH_VERSION=3.8.x-dev CHECK_CODING_STANDARDS=1
     - name: Code Coverage
       php: 7.2
       env: TESTBENCH_VERSION=3.8.x-dev RUN_CODE_COVERAGE=1
@@ -52,6 +55,8 @@ script:
   - |
     if [[ ${RUN_CODE_COVERAGE} ]]; then
       phpdbg -qrr -d memory_limit=-1 ./vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=build/logs/clover.xml
+    elsif [[ ${CHECK_CODING_STANDARDS} ]]; then
+      composer coding-standards
     else
       ./vendor/bin/phpunit
     fi
