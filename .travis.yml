@@ -15,24 +15,24 @@ php:
   - 7.1
 
 env:
-  - TESTBENCH_VERSION=3.8.1 # Laravel 5.8
-  - TESTBENCH_VERSION=3.5.5 # Laravel 5.5 (LTS)
+  - TESTBENCH_VERSION=3.8-dev # Laravel 5.8
+  - TESTBENCH_VERSION=3.5-dev # Laravel 5.5 (LTS)
 
 matrix:
   fast_finish: true
   include:
     - name: Minimum requirements (LTS)
       php: 7.0
-      env: TESTBENCH_VERSION=3.5.5
+      env: TESTBENCH_VERSION=3.5-dev
     - name: Code Coverage
       php: 7.2
-      env: TESTBENCH_VERSION=3.8 RUN_CODE_COVERAGE=1
+      env: TESTBENCH_VERSION=3.8-dev RUN_CODE_COVERAGE=1
     - name: Bleeding Edge
       php: nightly
       env: TESTBENCH_VERSION=dev-master
   exclude:
     - php: 7.1
-      env: TESTBENCH_VERSION=3.8.1
+      env: TESTBENCH_VERSION=3.8-dev
   allow_failures:
     - name: Bleeding Edge
       php: nightly
@@ -49,7 +49,7 @@ install:
       chmod +x coveralls.phar
       mkdir -p build/logs
     fi
-  - composer require --dev "orchestra/testbench=~$TESTBENCH_VERSION" --no-interaction --prefer-dist --update-with-all-dependencies
+  - composer require --dev "orchestra/testbench=$TESTBENCH_VERSION" --no-interaction --prefer-dist --update-with-all-dependencies
 
 script:
   - |
