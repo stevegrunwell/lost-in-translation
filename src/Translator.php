@@ -9,7 +9,8 @@ use LostInTranslation\Events\MissingTranslationFound;
 use LostInTranslation\Exceptions\MissingTranslationException;
 use Psr\Log\LoggerInterface;
 
-class Translator extends BaseTranslator {
+class Translator extends BaseTranslator
+{
 
     /**
      * The current logger instance.
@@ -55,7 +56,6 @@ class Translator extends BaseTranslator {
 
         // The "translation" is unchanged from the key.
         if ($translation === $key) {
-
             // Log the missing translation.
             if (config('lostintranslation.log')) {
                 $this->logMissingTranslation($key, $replace, $locale, $fallback);

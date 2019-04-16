@@ -38,9 +38,7 @@ class TranslationServiceProvider extends BaseProvider
         });
 
         // Load package configuration.
-        $this->mergeConfigFrom(
-            self::CONFIG_PATH, 'lostintranslation'
-        );
+        $this->mergeConfigFrom(self::CONFIG_PATH, 'lostintranslation');
     }
 
     /**

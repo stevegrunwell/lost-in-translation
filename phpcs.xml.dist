@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<ruleset name="LostInTranslation">
+    <description>Coding standards Lost in Translation.</description>
+
+    <arg name="extensions" value="php" />
+    <arg name="colors" />
+    <arg value="ps" />
+
+    <file>./src</file>
+    <file>./tests</file>
+
+    <rule ref="PSR2" />
+
+    <!-- Camel-case may be used for test methods. -->
+    <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
+        <exclude-pattern>tests/*</exclude-pattern>
+    </rule>
+</ruleset>
