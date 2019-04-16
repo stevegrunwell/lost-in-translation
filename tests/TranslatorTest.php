@@ -8,122 +8,119 @@ use LostInTranslation\Events\MissingTranslationFound;
 use LostInTranslation\Exceptions\MissingTranslationException;
 use LostInTranslation\Translator;
 use Mockery;
-use ReflectionProperty;
+use Psr\Log\LoggerInterface;
 
+/**
+ * @testdox Translator class
+ */
 class TranslatorTest extends TestCase
 {
-    public function setUp()
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    public function setUp(): void
     {
         parent::setUp();
 
-        Event::fake();
-    }
+        $this->logger = Mockery::spy(LoggerInterface::class);
 
-    public function testCanMockTranslationData()
-    {
-        $unique = uniqid();
-        $this->loadTranslations([
-            'key' => $unique,
-            'nested' => [
-                'foo' => [
-                    'bar' => [
-                        'baz' => 'This was nested',
-                    ],
-                ],
-            ],
+        $this->app->extend(LoggerInterface::class, function () {
+            return $this->logger;
+        });
+
+        Event::fake([
+            MissingTranslationFound::class,
         ]);
-
-        $this->assertEquals($unique, trans('testData.key'));
-        $this->assertEquals('This was nested', trans('testData.nested.foo.bar.baz'));
     }
 
-    public function testLogsMissingTranslations()
+    /**
+     * @test
+     */
+    public function it_should_do_nothing_if_the_translation_is_found()
     {
-        config(['lostintranslation.log' => true]);
+        try {
+            $this->setTranslations([
+                'key' => 'Some translation',
+            ]);
+        } catch (MissingTranslationException $e) {
+            $this->fail('Should not have received a MissingTranslationException.');
+        }
 
-        $mock = $this->createLoggerSpy();
+        $this->logger->shouldNotHaveReceived('notice');
 
+        Event::assertNotDispatched(MissingTranslationFound::class);
+    }
+
+    /**
+     * @test
+     * @group Logging
+     */
+    public function it_should_be_able_to_log_missing_translations()
+    {
         trans('testData.thisValueHasNotBeenDefined');
 
-        $mock->shouldHaveReceived('notice');
+        $this->logger->shouldHaveReceived('notice')
+            ->once();
     }
 
-    public function testLoggingCanBeDisabled()
+    /**
+     * @test
+     * @group Logging
+     */
+    public function it_should_log_any_replacements_that_were_provided()
+    {
+        trans('testData.thisValueHasNotBeenDefined', [
+            'foo' => 'bar',
+        ]);
+
+        $this->logger->shouldHaveReceived('notice')
+            ->once()
+            ->withArgs(function (string $msg, array $context) {
+                $this->assertSame(['foo' => 'bar'], data_get($context, 'replacements'));
+
+                return true;
+            });
+    }
+
+    /**
+     * @test
+     * @testdox It should respect the value of the `lostintranslations.log` configuration
+     * @group Logging
+     */
+    public function logging_can_be_disabled()
     {
         config(['lostintranslation.log' => false]);
 
-        $mock = $this->createLoggerSpy();
-
         trans('testData.thisValueHasNotBeenDefined');
 
-        $mock->shouldNotHaveReceived('notice');
+        $this->logger->shouldNotHaveReceived('notice');
     }
 
-    public function testThrowsMissingTranslationException()
+    /**
+     * @test
+     * @group Exceptions
+     */
+    public function it_should_be_able_to_throw_MissingTranslationException_exceptions()
     {
         config(['lostintranslation.throw_exceptions' => true]);
 
-        try {
-            trans('testData.missing_key');
+        $this->expectException(MissingTranslationException::class);
 
-        } catch (MissingTranslationException $e) {
-            $this->assertInstanceOf(MissingTranslationException::class, $e);
-
-            return;
-        }
-
-        $this->fail('Did not receive expected exception.');
+        trans('testData.missing_key');
     }
 
-    public function testFiresMissingTranslationFoundEvent()
+    /**
+     * @test
+     * @group Events
+     */
+    public function it_should_fire_a_MissingTranslationFound_event()
     {
         trans('testData.thisValueHasNotBeenDefined');
 
         Event::assertDispatched(MissingTranslationFound::class, function ($e) {
             return 'testData.thisValueHasNotBeenDefined' === $e->key;
         });
-    }
-
-    /**
-     * Mock the loaded translations within the Translator instance.
-     *
-     * All translations will be under the 'testData' file, as if there were a
-     * resources/lang/en/testData.php translation file.
-     *
-     * @link https://laravel.com/docs/5.5/localization
-     *
-     * @param array $translations Translations as they would be defined in a Laravel language file.
-     *
-     * @return void
-     */
-    protected function loadTranslations($translations)
-    {
-        $translator = resolve('translator');
-
-        $loaded = new ReflectionProperty($translator, 'loaded');
-        $loaded->setAccessible(true);
-
-        $loaded->setValue($translator, [
-            '*' => [
-                'testData' => [
-                    'en' => (array) $translations,
-                ],
-            ],
-        ]);
-    }
-
-    /**
-     * Create a Mockery spy and assign it to Translator::$logger.
-     *
-     * @return \Mockery\MockInterface
-     */
-    protected function createLoggerSpy()
-    {
-        $mock = Mockery::spy(Writer::class);
-        $prop = new ReflectionProperty(Translator::class, 'logger');
-        $prop->setAccessible(true);
-        $prop->setValue(resolve('translator'), $mock);
-
-        return $mock;
     }
 }

@@ -5,9 +5,15 @@ namespace Tests;
 use LostInTranslation\Providers\TranslationServiceProvider;
 use LostInTranslation\Translator;
 
+/**
+ * @testdox Translation service provider
+ */
 class TranslationServiceProviderTest extends TestCase
 {
-    public function testOverridesDefaultTranslator()
+    /**
+     * @test
+     */
+    public function it_should_override_the_default_translator_class()
     {
         $this->assertInstanceOf(
             Translator::class,
@@ -19,7 +25,11 @@ class TranslationServiceProviderTest extends TestCase
         );
     }
 
-    public function testProvidesConfiguration()
+    /**
+     * @test
+     * @group Config
+     */
+    public function it_should_provide_configuration()
     {
         $this->assertNotEmpty(
             config('lostintranslation'),
@@ -27,7 +37,11 @@ class TranslationServiceProviderTest extends TestCase
         );
     }
 
-    public function testPublishesConfig()
+    /**
+     * @test
+     * @group Config
+     */
+    public function it_should_permit_the_config_to_be_published()
     {
         $provided = TranslationServiceProvider::$publishes[TranslationServiceProvider::class];
 

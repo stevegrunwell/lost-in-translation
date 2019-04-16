@@ -35,18 +35,18 @@ class MissingTranslationFound
     /**
      * Create a new event instance.
      *
-     * @param  string       $key
-     * @param  array        $replace
-     * @param  string|null  $locale
-     * @param  bool         $fallback
+     * @param string $key
+     * @param array  $replace
+     * @param string $locale
+     * @param string $fallback
      *
      * @return void
      */
-    public function __construct($key, array $replace = [], $locale = null, $fallback = null)
+    public function __construct(string $key, array $replace = [], string $locale = null, string $fallback = null)
     {
-        $this->key = $key;
+        $this->key          = $key;
         $this->replacements = $replace;
-        $this->locale = $locale ? $locale : config('app.locale');
-        $this->fallback = $fallback ? $fallback : config('app.fallback_locale');
+        $this->locale       = $locale ?: config('app.locale');
+        $this->fallback     = $fallback ?: config('app.fallback_locale');
     }
 }

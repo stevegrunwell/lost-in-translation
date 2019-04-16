@@ -4,6 +4,7 @@ namespace LostInTranslation\Providers;
 
 use Illuminate\Translation\TranslationServiceProvider as BaseProvider;
 use LostInTranslation\Translator;
+use Psr\Log\LoggerInterface;
 
 class TranslationServiceProvider extends BaseProvider
 {
@@ -25,10 +26,11 @@ class TranslationServiceProvider extends BaseProvider
         $this->registerLoader();
 
         $this->app->singleton('translator', function ($app) {
-            $loader = $app['translation.loader'];
-            $locale = $app['config']['app.locale'];
-
-            $trans = new Translator($loader, $locale);
+            $trans = new Translator(
+                $app['translation.loader'],
+                $app['config']['app.locale'],
+                $app->make(LoggerInterface::class)
+            );
 
             $trans->setFallback($app['config']['app.fallback_locale']);
 
