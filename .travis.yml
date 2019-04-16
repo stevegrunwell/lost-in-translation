@@ -49,6 +49,11 @@ install:
       chmod +x coveralls.phar
       mkdir -p build/logs
     fi
+  - |
+    # Remove items we don't need unless we're testing coding standards
+    if [[ ! ${CHECK_CODING_STANDARDS} ]]; then
+      composer remove --dev friendsofphp/php-cs-fixer nunomaduro/larastan squizlabs/php_codesniffer
+    fi
   - composer require --dev "orchestra/testbench=$TESTBENCH_VERSION" --no-interaction --prefer-dist --update-with-all-dependencies
 
 script:
