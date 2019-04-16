@@ -26,10 +26,11 @@ class TranslationServiceProvider extends BaseProvider
         $this->registerLoader();
 
         $this->app->singleton('translator', function ($app) {
-            $loader = $app['translation.loader'];
-            $locale = $app['config']['app.locale'];
-
-            $trans = new Translator($loader, $locale, $app->make(LoggerInterface::class));
+            $trans = new Translator(
+                $app['translation.loader'],
+                $app['config']['app.locale'],
+                $app->make(LoggerInterface::class)
+            );
 
             $trans->setFallback($app['config']['app.fallback_locale']);
 
