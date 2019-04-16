@@ -43,10 +43,10 @@ class Translator extends BaseTranslator
      *
      * @throws MissingTranslationException When no replacement is made.
      *
-     * @param  string       $key
-     * @param  array        $replace
-     * @param  string|null  $locale
-     * @param  bool         $fallback
+     * @param  string      $key
+     * @param  array       $replace
+     * @param  string|null $locale
+     * @param  bool        $fallback
      *
      * @return string|array|null
      */
@@ -69,7 +69,7 @@ class Translator extends BaseTranslator
             }
 
             // Dispatch a MissingTranslationFound event.
-            event(new MissingTranslationFound($key, $replace, $locale, $fallback));
+            event(new MissingTranslationFound($key, $replace, $locale, $fallback ? config('app.fallback_locale') : ''));
         }
 
         return $translation;

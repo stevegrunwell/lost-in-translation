@@ -19,6 +19,7 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.0",
+        "nunomaduro/larastan": "^0.3.16",
         "orchestra/testbench": "^3.5",
         "squizlabs/php_codesniffer": "^3.4"
     },
@@ -34,7 +35,9 @@
     },
     "scripts": {
         "test": [
-            "phpunit --testdox --colors=always"
+            "phpunit --testdox --colors=always",
+            "phpcs",
+            "phpstan analyse ./src/"
         ],
         "test-coverage": [
             "phpdbg -qrr -d memory_limit=-1 ./vendor/bin/phpunit --testdox --colors=always --coverage-html=tests/coverage"

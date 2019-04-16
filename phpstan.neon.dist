@@ -1,0 +1,8 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+parameters:
+    level: 7
+    ignoreErrors:
+        -
+            message: '#Call to an undefined static method [a-zA-Z0-9\\_]+::boot\(\)#'
+            path: %currentWorkingDirectory%/src/Providers/TranslationServiceProvider.php
