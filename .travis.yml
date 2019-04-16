@@ -15,24 +15,24 @@ php:
   - 7.1
 
 env:
-  - TESTBENCH_VERSION=3.8-dev # Laravel 5.8
-  - TESTBENCH_VERSION=3.5-dev # Laravel 5.5 (LTS)
+  - TESTBENCH_VERSION=3.8.x-dev # Laravel 5.8
+  - TESTBENCH_VERSION=3.5.x-dev # Laravel 5.5 (LTS)
 
 matrix:
   fast_finish: true
   include:
     - name: Minimum requirements (LTS)
       php: 7.0
-      env: TESTBENCH_VERSION=3.5-dev
+      env: TESTBENCH_VERSION=3.5.x-dev
     - name: Code Coverage
       php: 7.2
-      env: TESTBENCH_VERSION=3.8-dev RUN_CODE_COVERAGE=1
+      env: TESTBENCH_VERSION=3.8.x-dev RUN_CODE_COVERAGE=1
     - name: Bleeding Edge
       php: nightly
       env: TESTBENCH_VERSION=dev-master
   exclude:
     - php: 7.1
-      env: TESTBENCH_VERSION=3.8-dev
+      env: TESTBENCH_VERSION=3.8.x-dev
   allow_failures:
     - name: Bleeding Edge
       php: nightly
