@@ -83,7 +83,7 @@ class Translator extends BaseTranslator {
      * @param string $locale
      * @param bool   $fallback
      */
-    protected function logMissingTranslation(string $key, array $replacements, string $locale, bool $fallback): void
+    protected function logMissingTranslation(string $key, array $replacements, ?string $locale, bool $fallback): void
     {
         $this->logger->notice('Missing translation: ' . $key, [
             'replacements' => $replacements,
