@@ -20,7 +20,7 @@ class TestCase extends BaseTestCase
      */
     protected function getFaker(): FakerGenerator
     {
-        if (is_null($this->faker)) {
+        if (null === $this->faker) {
             $this->faker = FakerFactory::create();
         }
 

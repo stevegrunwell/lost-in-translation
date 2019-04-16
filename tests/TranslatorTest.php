@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use Illuminate\Log\Writer;
 use Illuminate\Support\Facades\Event;
 use LostInTranslation\Events\MissingTranslationFound;
 use LostInTranslation\Exceptions\MissingTranslationException;

@@ -11,7 +11,6 @@ use Psr\Log\LoggerInterface;
 
 class Translator extends BaseTranslator
 {
-
     /**
      * The current logger instance.
      *
