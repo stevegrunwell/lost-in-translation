@@ -9,8 +9,8 @@ use LostInTranslation\Events\MissingTranslationFound;
 use LostInTranslation\Exceptions\MissingTranslationException;
 use Psr\Log\LoggerInterface;
 
-class Translator extends BaseTranslator {
-
+class Translator extends BaseTranslator
+{
     /**
      * The current logger instance.
      *
@@ -42,10 +42,10 @@ class Translator extends BaseTranslator {
      *
      * @throws MissingTranslationException When no replacement is made.
      *
-     * @param  string       $key
-     * @param  array        $replace
-     * @param  string|null  $locale
-     * @param  bool         $fallback
+     * @param  string      $key
+     * @param  array       $replace
+     * @param  string|null $locale
+     * @param  bool        $fallback
      *
      * @return string|array|null
      */
@@ -55,7 +55,6 @@ class Translator extends BaseTranslator {
 
         // The "translation" is unchanged from the key.
         if ($translation === $key) {
-
             // Log the missing translation.
             if (config('lostintranslation.log')) {
                 $this->logMissingTranslation($key, $replace, $locale, $fallback);
@@ -69,7 +68,7 @@ class Translator extends BaseTranslator {
             }
 
             // Dispatch a MissingTranslationFound event.
-            event(new MissingTranslationFound($key, $replace, $locale, $fallback));
+            event(new MissingTranslationFound($key, $replace, $locale, $fallback ? config('app.fallback_locale') : ''));
         }
 
         return $translation;

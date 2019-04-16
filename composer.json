@@ -18,8 +18,11 @@
         "php": "^7.1"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.14",
         "mockery/mockery": "^1.0",
-        "orchestra/testbench": "^3.5"
+        "nunomaduro/larastan": "^0.3.16",
+        "orchestra/testbench": "^3.5",
+        "squizlabs/php_codesniffer": "^3.4"
     },
     "autoload": {
         "psr-4": {
@@ -32,6 +35,11 @@
         }
     },
     "scripts": {
+        "coding-standards": [
+            "phpcs",
+            "php-cs-fixer fix --dry-run --verbose",
+            "phpstan analyse ./src/"
+        ],
         "test": [
             "phpunit --testdox --colors=always"
         ],
@@ -40,6 +48,7 @@
         ]
     },
     "scripts-descriptions": {
+        "coding-standards": "Check coding standards and perform static code analysis.",
         "test": "Run all tests for the package.",
         "test-coverage": "Generate code coverage reports for the package."
     },
