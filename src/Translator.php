@@ -58,7 +58,7 @@ class Translator extends BaseTranslator {
 
             // Log the missing translation.
             if (config('lostintranslation.log')) {
-                $this->logMissingTranslation($key, $replace, (string) $locale, $fallback);
+                $this->logMissingTranslation($key, $replace, $locale, $fallback);
             }
 
             // Throw a MissingTranslationException if no translation was made.

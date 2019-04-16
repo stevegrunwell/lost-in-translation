@@ -44,9 +44,9 @@ class MissingTranslationFound
      */
     public function __construct(string $key, array $replace = [], string $locale = null, string $fallback = null)
     {
-        $this->key = $key;
+        $this->key          = $key;
         $this->replacements = $replace;
-        $this->locale = $locale ? $locale : config('app.locale');
-        $this->fallback = $fallback ? $fallback : config('app.fallback_locale');
+        $this->locale       = $locale ?: config('app.locale');
+        $this->fallback     = $fallback ?: config('app.fallback_locale');
     }
 }
