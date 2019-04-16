@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use Illuminate\Log\Logger;
 use Illuminate\Log\Writer;
 use Illuminate\Support\Facades\Event;
 use LostInTranslation\Events\MissingTranslationFound;
@@ -25,7 +24,7 @@ class TranslatorTest extends TestCase
     {
         parent::setUp();
 
-        $this->logger = Mockery::spy(Logger::class);
+        $this->logger = Mockery::spy(LoggerInterface::class);
 
         $this->app->extend(LoggerInterface::class, function () {
             return $this->logger;

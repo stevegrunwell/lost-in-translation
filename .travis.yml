@@ -21,7 +21,7 @@ env:
 matrix:
   fast_finish: true
   include:
-    - name: Laravel 5.5 LTS, PHP 7.0
+    - name: Minimum requirements (LTS)
       php: 7.0
       env: TESTBENCH_VERSION=3.5.5
     - name: Code Coverage

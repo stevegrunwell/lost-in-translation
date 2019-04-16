@@ -2,9 +2,9 @@
 
 namespace LostInTranslation\Providers;
 
-use Illuminate\Log\Logger;
 use Illuminate\Translation\TranslationServiceProvider as BaseProvider;
 use LostInTranslation\Translator;
+use Psr\Log\LoggerInterface;
 
 class TranslationServiceProvider extends BaseProvider
 {
@@ -29,7 +29,7 @@ class TranslationServiceProvider extends BaseProvider
             $loader = $app['translation.loader'];
             $locale = $app['config']['app.locale'];
 
-            $trans = new Translator($loader, $locale, $app->make(Logger::class));
+            $trans = new Translator($loader, $locale, $app->make(LoggerInterface::class));
 
             $trans->setFallback($app['config']['app.fallback_locale']);
 

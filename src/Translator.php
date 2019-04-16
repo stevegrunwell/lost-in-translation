@@ -7,13 +7,14 @@ use Illuminate\Log\Logger;
 use Illuminate\Translation\Translator as BaseTranslator;
 use LostInTranslation\Events\MissingTranslationFound;
 use LostInTranslation\Exceptions\MissingTranslationException;
+use Psr\Log\LoggerInterface;
 
 class Translator extends BaseTranslator {
 
     /**
      * The current logger instance.
      *
-     * @var \Illuminate\Log\Logger
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -22,11 +23,11 @@ class Translator extends BaseTranslator {
      *
      * @param \Illuminate\Contracts\Translation\Loader  $loader
      * @param string                                    $locale
-     * @param \Illuminate\Log\Logger                    $logger
+     * @param \Psr\Log\LoggerInterface                  $logger
      *
      * @return void
      */
-    public function __construct(Loader $loader, string $locale, Logger $logger)
+    public function __construct(Loader $loader, string $locale, LoggerInterface $logger)
     {
         parent::__construct($loader, $locale);
 
