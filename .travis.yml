@@ -55,7 +55,7 @@ script:
   - |
     if [[ ${RUN_CODE_COVERAGE} ]]; then
       phpdbg -qrr -d memory_limit=-1 ./vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=build/logs/clover.xml
-    elsif [[ ${CHECK_CODING_STANDARDS} ]]; then
+    elif [[ ${CHECK_CODING_STANDARDS} ]]; then
       composer coding-standards
     else
       ./vendor/bin/phpunit
