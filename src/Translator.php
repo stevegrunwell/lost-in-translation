@@ -54,7 +54,7 @@ class Translator extends BaseTranslator
         $translation = parent::get($key, $replace, $locale, $fallback);
 
         // The "translation" is unchanged from the key.
-        if ($translation === $key) {
+        if ($translation === $key || !isset($this->loaded['*']['*'][$locale ?: $this->locale][$key])) {
             // Log the missing translation.
             if (config('lostintranslation.log')) {
                 $this->logMissingTranslation($key, $replace, $locale, $fallback);
