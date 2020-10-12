@@ -14,7 +14,15 @@ Lost in Translation can be installed into your Laravel project via Composer:
 $ composer require stevegrunwell/lost-in-translation
 ```
 
-By default, this will replace the default `TranslationServiceProvider` class with a sub-class that adds additional logic when a translation isn't found. To resume default behavior (even in a production environment), see [the "Configuration" section below](#configuration).
+In config.app you must replace default `Illuminate\Translation\TranslationServiceProvider`  with `LostInTranslation\Providers\TranslationServiceProvider::class`
+
+```
+...
+// Illuminate\Translation\TranslationServiceProvider::class,
+LostInTranslation\Providers\TranslationServiceProvider::class,
+...
+```
+To resume default behavior (even in a production environment), see [the "Configuration" section below](#configuration).
 
 
 ## Configuration
