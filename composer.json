@@ -15,7 +15,7 @@
         "source": "https://github.com/stevegrunwell/lost-in-translation/"
     },
     "require": {
-        "php": "^7.1"
+        "php": "^8.1"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.14",

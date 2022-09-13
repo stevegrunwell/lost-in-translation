@@ -18,6 +18,16 @@ class Translator extends BaseTranslator
      */
     protected $logger;
 
+    private $ignoreMissing = [
+        'validation.values.postbox_number.',
+        'validation.values.postal_code.',
+        'validation.values.terms_accepted',
+
+        'validation.values.iban.',
+        'validation.values.terms_accepted.',
+        'validation.custom.iban'
+    ];
+
     /**
      * Create a new translator instance.
      *
@@ -54,7 +64,13 @@ class Translator extends BaseTranslator
         $translation = parent::get($key, $replace, $locale, $fallback);
 
         // The "translation" is unchanged from the key.
-        if ($translation === $key || !isset($this->loaded['*']['*'][$locale ?: $this->locale][$key])) {
+        if ($translation === $key) {
+            // || !isset($this->loaded['*']['*'][$locale ?: $this->locale][$key])) {
+
+            if ($this->shouldIgnore($key)) {
+                return $translation;
+            }
+
             // Log the missing translation.
             if (config('lostintranslation.log')) {
                 $this->logMissingTranslation($key, $replace, $locale, $fallback);
@@ -89,5 +105,19 @@ class Translator extends BaseTranslator
             'locale'       => $locale ?: config('app.locale'),
             'fallback'     => $fallback ? config('app.fallback_locale') : '',
         ]);
+    }
+
+
+    private function shouldIgnore(string $key): bool
+    {
+        $result = false;
+        foreach ($this->ignoreMissing as $pattern) {
+
+            if (false !== str_contains($key, $pattern)) {
+                $result = true;
+            }
+        }
+
+        return $result;
     }
 }
