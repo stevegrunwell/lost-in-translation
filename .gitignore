@@ -2,3 +2,4 @@
 .phpunit.result.cache
 tests/coverage
 vendor
+.idea
