@@ -18,14 +18,11 @@ class Translator extends BaseTranslator
      */
     protected $logger;
 
+    /*
+     * Laravel allowes for input values validations, so no every time a translation is not found is a problem
+     */
     private $ignoreMissing = [
-        'validation.values.postbox_number.',
-        'validation.values.postal_code.',
-        'validation.values.terms_accepted',
-
-        'validation.values.iban.',
-        'validation.values.terms_accepted.',
-        'validation.custom.iban'
+        'validation.values.',
     ];
 
     /**
