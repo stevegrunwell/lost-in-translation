@@ -18,6 +18,11 @@ class Translator extends BaseTranslator
      */
     protected $logger;
 
+    /*
+     * Add the pattern of the key that you allow to be non-translated
+     */
+    private $ignoreMissing = [];
+
     /**
      * Create a new translator instance.
      *
@@ -53,8 +58,15 @@ class Translator extends BaseTranslator
     {
         $translation = parent::get($key, $replace, $locale, $fallback);
 
-        // The "translation" is unchanged from the key.
-        if ($translation === $key || !isset($this->loaded['*']['*'][$locale ?: $this->locale][$key])) {
+        /*
+         * When the translation is the same as the key, then the translation is not found
+         */
+        if ($translation === $key) {
+
+            if ($this->shouldIgnore($key)) {
+                return $translation;
+            }
+
             // Log the missing translation.
             if (config('lostintranslation.log')) {
                 $this->logMissingTranslation($key, $replace, $locale, $fallback);
@@ -75,6 +87,14 @@ class Translator extends BaseTranslator
     }
 
     /**
+     * Check if there is a translation in a json file
+     */
+    private function hasJsonTranslation(string $locale, string $key): bool
+    {
+        return isset($this->loaded['*']['*'][$locale ?: $this->locale][$key]);
+    }
+
+    /**
      * Log a missing translation.
      *
      * @param string $key
@@ -89,5 +109,42 @@ class Translator extends BaseTranslator
             'locale'       => $locale ?: config('app.locale'),
             'fallback'     => $fallback ? config('app.fallback_locale') : '',
         ]);
+    }
+
+
+    private function shouldIgnore(string $key): bool
+    {
+        if ($this->ignoreCustomValues($key)) {
+            return true;
+        }
+
+        $result = false;
+        foreach ($this->ignoreMissing as $pattern) {
+
+            if (false !== str_contains($key, $pattern)) {
+                $result = true;
+            }
+        }
+
+        return $result;
+    }
+
+    /*
+     * Laravel allows for translatable custom values which results in a key to be translated like
+     * 'validation.values.postal_code.<user-input>' i.e. validation.values.postal_code.2263AB
+     * FormatsMessages->getDisplayableValue() uses the translator to translate this string,
+     * and that triggers this translator class and returns the key if not found
+     *
+     * these custom values translations always have the pattern : "validation.values.{$attribute}.{$value}"
+     * the $value can be null then the key will be "validation.values.iban." note the DOT at the end
+     *
+     */
+    private function ignoreCustomValues(string $key): bool
+    {
+        if (false !== str_contains($key, 'validation.values.')) {
+            return true;
+        }
+
+        return false;
     }
 }
